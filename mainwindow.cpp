@@ -18,13 +18,18 @@ MainWindow::~MainWindow()
 
 void MainWindow::onLoad()
 {
-    Image *myImage = new Image;
-    if(myImage->readPgm("Face.pgm") == 0)
+    MyImage imageObj;
+    MyImage *image = &imageObj;
+
+    int flag = readPgm((char *)"Face.pgm", image);
+    if (flag == -1)
     {
-        QImage labelImage(myImage->data(), myImage->width(), myImage->height(), QImage::Format_MonoLSB);
-        ui->label->setPixmap(QPixmap::fromImage(labelImage));
-        qDebug() << myImage->writePgm("face1.pgm");
+        qDebug() << "Unable to open input image\n";
+
     }
+    QImage labelImage(image->data, image->width, image->height, QImage::Format_Indexed8);
+    ui->label->setPixmap(QPixmap::fromImage(labelImage));
+    ui->label->setFixedSize(image->width, image->height);
 
 }
 

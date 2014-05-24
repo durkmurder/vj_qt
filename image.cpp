@@ -51,6 +51,22 @@ char* strrev(char* str)
 	return str;
 }
 
+//int chartoi(const char *string)
+//{
+//	int i;
+//	i=0;
+//	while(*string)
+//	{
+//		// i<<3 is equivalent of multiplying by 2*2*2 or 8
+//		// so i<<3 + i<<1 means multiply by 10
+//		i=(i<<3) + (i<<1) + (*string - '0');
+//		string++;
+//
+//		// Dont increment i!
+//
+//	}
+//	return(i);
+//}
 
 int myatoi (char* string)
 {
@@ -97,29 +113,12 @@ void itochar(int x, char* szBuffer, int radix)
 }
 
 
-Image::Image()
-{
-    image = new MyImage;
-    intImage = new MyIntImage;
-}
-
-Image::Image(MyImage *im)
-{
-    *image = *im;
-}
-
-Image::~Image()
-{
-    freeImage();
-    delete image;
-    delete intImage;
-}
-
-int Image::readPgm(char *fileName)
+int readPgm(char *fileName, MyImage *image)
 {
 	FILE *in_file;
 	char ch;
 	int type;
+	char version[3];
 	char line[100];
 	char mystring [20];
 	char *pch;
@@ -189,7 +188,7 @@ int Image::readPgm(char *fileName)
 	return 0;
 }
 
-int Image::writePgm(char *fileName)
+int writePgm(char *fileName, MyImage *image)
 {
 	char parameters_str[5];
 	int i;
@@ -229,27 +228,27 @@ int Image::writePgm(char *fileName)
 	return 0;
 }
 
-int Image::cpyPgm(MyImage* dst)
+int cpyPgm(MyImage* src, MyImage* dst)
 {
 	int i = 0;
-    if (image->flag == 0)
+	if (src->flag == 0)
 	{
 		printf("No data available in the specified source image\n");
 		return -1;
 	}
-    dst->width = image->width;
-    dst->height = image->height;
-    dst->maxgrey = image->maxgrey;
-    dst->data = (unsigned char*)malloc(sizeof(unsigned char) * (dst->height * dst->width));
+	dst->width = src->width;
+	dst->height = src->height;
+	dst->maxgrey = src->maxgrey;
+	dst->data = (unsigned char*)malloc(sizeof(unsigned char)*(dst->height*dst->width));
 	dst->flag = 1;
 	for (i = 0; i < (dst->width * dst->height); i++)
 	{
-        dst->data[i] = image->data[i];
+		dst->data[i] = src->data[i];
 	}
 }
 
 
-void Image::createImage(int width, int height)
+void createImage(int width, int height, MyImage *image)
 {
 	image->width = width;
 	image->height = height;
@@ -257,15 +256,15 @@ void Image::createImage(int width, int height)
 	image->data = (unsigned char *)malloc(sizeof(unsigned char)*(height*width));
 }
 
-void Image::createSumImage(int width, int height)
+void createSumImage(int width, int height, MyIntImage *image)
 {
-    intImage->width = width;
-    intImage->height = height;
-    intImage->flag = 1;
-    intImage->data = (int *)malloc(sizeof(int)*(height*width));
+	image->width = width;
+	image->height = height;
+	image->flag = 1;
+	image->data = (int *)malloc(sizeof(int)*(height*width));
 }
 
-int Image::freeImage()
+int freeImage(MyImage* image)
 {
 	if (image->flag == 0)
 	{
@@ -280,9 +279,9 @@ int Image::freeImage()
 	}
 }
 
-int Image::freeSumImage()
+int freeSumImage(MyIntImage* image)
 {
-    if (intImage->flag == 0)
+	if (image->flag == 0)
 	{
 		printf("no image to delete\n");
 		return -1;
@@ -290,34 +289,19 @@ int Image::freeSumImage()
 	else
 	{
 //		printf("image deleted\n");
-        free(intImage->data);
+		free(image->data); 
 		return 0;
 	}
 }
 
-void Image::setImage(int width, int height)
+void setImage(int width, int height, MyImage *image)
 {
 	image->width = width;
 	image->height = height;
 }
 
-void Image::setSumImage(int width, int height)
+void setSumImage(int width, int height, MyIntImage *image)
 {
-    intImage->width = width;
-    intImage->height = height;
-}
-
-const unsigned char *Image::data() const
-{
-    return image->data;
-}
-
-const int Image::width() const
-{
-    return image->width;
-}
-
-const int Image::height() const
-{
-    return image->height;
+	image->width = width;
+	image->height = height;
 }

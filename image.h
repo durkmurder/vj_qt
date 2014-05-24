@@ -36,47 +36,36 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <string>
+#include <string.h>
 
-struct MyImage
+typedef struct 
 {
-    int width;
-    int height;
-    int maxgrey;
-    unsigned char* data;
-    int flag;
-};
+	int width;
+	int height;
+	int maxgrey;
+	unsigned char* data;
+	int flag;
+}
+MyImage;
 
-struct MyIntImage
+typedef struct 
 {
-    int width;
-    int height;
-    int* data;
-    int flag;
-};
+	int width;
+	int height;
+	int* data;
+	int flag;
+}
+MyIntImage;
 
-class Image
-{
-public:
-    Image();
-    Image(MyImage *im);
-    ~Image();
-    int readPgm(char *fileName);
-    int writePgm(char *fileName);
-    int cpyPgm(MyImage *dst);
-    void createImage(int width, int height);
-    void createSumImage(int width, int height);
-    int freeImage();
-    int freeSumImage();
-    void setImage(int width, int height);
-    void setSumImage(int width, int height);
-    const unsigned char *data() const;
-    const int width() const;
-    const int height() const;
+int readPgm(char *fileName, MyImage* image);
+int writePgm(char *fileName, MyImage* image);
+int cpyPgm(MyImage *src, MyImage *dst);
+void createImage(int width, int height, MyImage *image);
+void createSumImage(int width, int height, MyIntImage *image);
+int freeImage(MyImage* image);
+int freeSumImage(MyIntImage* image);
+void setImage(int width, int height, MyImage *image);
+void setSumImage(int width, int height, MyIntImage *image);
 
-private:
-    MyImage *image;
-    MyIntImage *intImage;
-};
 
 #endif

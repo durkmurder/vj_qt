@@ -15,10 +15,13 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     image.cpp \
-    stdio-wrapper.cpp
+    stdio-wrapper.cpp \
+    haar.cpp \
+    rectangles.cpp
 
 HEADERS  += mainwindow.h \
     image.h \
-    stdio-wrapper.h
+    stdio-wrapper.h \
+    haar.h
 
 FORMS    += mainwindow.ui
